@@ -26,6 +26,7 @@ type Logger struct {
 	logfileSuffix string          // 日志文件后缀
 	redirectPanic bool            // 重定向错误
 	disableMark   bool            // 关闭标签
+	noCodeLine    bool            // 不打印代码行
 }
 
 // 新建Log

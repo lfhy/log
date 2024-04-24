@@ -1,0 +1,7 @@
+.vscode/
+.tmp/
+tmp/
+*.log
+nohup.out
+out/
+.DS_Store

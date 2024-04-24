@@ -20,11 +20,14 @@ func (l *Logger) printfcallLog(logLevel string, mark string, call int, format st
 	if !l.disableMark {
 		infoString += "[" + mark + "] "
 	}
-	if l.short {
-		infoString += "[" + callfileName[len(callfileName)-1] + ":" + strconv.Itoa(callline) + "]: "
-	} else {
-		infoString += "[" + callfileName[len(callfileName)-1] + ":" + strconv.Itoa(callline) + "][" + runtime.FuncForPC(callpc).Name() + "]" + ":"
+	if !l.noCodeLine {
+		if l.short {
+			infoString += "[" + callfileName[len(callfileName)-1] + ":" + strconv.Itoa(callline) + "]: "
+		} else {
+			infoString += "[" + callfileName[len(callfileName)-1] + ":" + strconv.Itoa(callline) + "][" + runtime.FuncForPC(callpc).Name() + "]" + ":"
+		}
 	}
+
 	// 推流数据库
 	if l.push {
 		go func() {
@@ -54,5 +57,22 @@ func SetCodeCaller(caller int) {
 func WithCodeCaller(caller int) LoggerOption {
 	return func(l *Logger) {
 		l.SetCodeCaller(caller)
+	}
+}
+
+// 设置不打印代码行
+func (l *Logger) SetNoPrintCodeLine(noprint bool) {
+	l.noCodeLine = noprint
+}
+
+// 设置不打印代码行
+func SetNoPrintCodeLine(noprint bool) {
+	GetLogout().SetNoPrintCodeLine(noprint)
+}
+
+// 不打印代码行
+func WithNoPrintCodeLine() LoggerOption {
+	return func(l *Logger) {
+		l.SetNoPrintCodeLine(true)
 	}
 }

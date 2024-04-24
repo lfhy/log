@@ -1,6 +1,8 @@
 package main
 
-import "github.com/lfhy/log"
+import (
+	"github.com/lfhy/log"
+)
 
 func main() {
 	log.SetLogLevel(log.DEBUGLevel)
