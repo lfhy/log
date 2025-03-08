@@ -8,15 +8,26 @@ import (
 	"time"
 )
 
-func (l *Logger) printcallLog(logLevel, mark string, call int, v ...any) {
+func (l *Logger) printcallLog(logLevel LogLevel, mark string, call int, v ...any) {
 	l.printfcallLog(logLevel, mark, call+1, "%s", fmt.Sprintln(v...))
 }
 
-func (l *Logger) printfcallLog(logLevel string, mark string, call int, format string, args ...any) {
+func (l *Logger) printfcallLog(logLevel LogLevel, mark string, call int, format string, args ...any) {
+	if logLevel == 0 {
+		return
+	}
 	callpc, callfile, callline, _ := runtime.Caller(call)
 	callfileName := strings.Split(callfile, "/")
 	var infoString string
-	infoString = logLevel
+	var logPrefix string
+	if l.noColor {
+		logPrefix = LogLevelNoColorPrefixMap[logLevel]
+	} else {
+		logPrefix = LogLevelColorPrefixMap[logLevel]
+	}
+
+	infoString = logPrefix
+
 	if !l.disableMark {
 		infoString += "[" + mark + "] "
 	}
@@ -31,12 +42,12 @@ func (l *Logger) printfcallLog(logLevel string, mark string, call int, format st
 	// 推流数据库
 	if l.push {
 		go func() {
-			*l.GetLogChannl() <- LogInfo{CreateTime: time.Now().Unix(), Level: LogLevelStrMap[logLevel], CodeFile: callfile, CodeLine: callline, Content: fmt.Sprintf(format, args...)}
+			*l.GetLogChannl() <- LogInfo{CreateTime: time.Now().Unix(), Level: logLevel, CodeFile: callfile, CodeLine: callline, Content: fmt.Sprintf(format, args...)}
 		}()
 	}
 	if !l.isStdout && l.useStdout {
 		if l.short {
-			l.GetStdLogger().Printf(logLevel + fmt.Sprintf(format, args...))
+			l.GetStdLogger().Printf("%s", logPrefix+fmt.Sprintf(format, args...))
 		} else {
 			l.GetStdLogger().Printf(infoString+format, args...)
 		}

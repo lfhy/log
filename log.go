@@ -5,7 +5,7 @@ var defaultLog *Logger
 // 获取日志输出
 func GetLogout() *Logger {
 	if defaultLog == nil {
-		defaultLog = NewLogger(WithCodeCaller(3), WithDisableMark(), WithNoPrintCodeLine())
+		defaultLog = NewLogger(WithCodeCaller(3), WithDisableMark(), WithNoPrintCodeLine(), WithLogLevel(LogLevelSpeed))
 	}
 	return defaultLog
 }

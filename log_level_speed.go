@@ -37,6 +37,17 @@ func (l *Logger) EndTimeWithText(subText string, startTime time.Time) {
 // Debug日志
 func (l *Logger) Speed(v ...any) {
 	if l.logLevel >= SPEEDLevel {
-		l.printcallLog(SPEEDPrefix, l.mark, l.caller+1, v...)
+		l.speed(l.caller+1, v...)
 	}
+}
+
+// 上层代码行日志
+func (l *Logger) PSpeed(v ...any) {
+	if l.logLevel >= SPEEDLevel {
+		l.speed(l.caller+2, v...)
+	}
+}
+
+func (l *Logger) speed(call int, v ...any) {
+	l.printcallLog(LogLevelSpeed, l.mark, call+1, v...)
 }
