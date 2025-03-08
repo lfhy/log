@@ -15,3 +15,5 @@ func main() {
 	log.Error("Error日志")
 }
 ```
+# 使用文档
+[GoDoc](https://pkg.go.dev/github.com/lfhy/log)

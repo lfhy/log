@@ -42,6 +42,10 @@ func (l *Logger) DisableMark() {
 	l.disableMark = true
 }
 
+func SetShortout(value bool) {
+	GetLogout().SetShortout(value)
+}
+
 func WithShortout() LoggerOption {
 	return func(l *Logger) {
 		l.short = true
@@ -54,4 +58,8 @@ func Shortout() {
 
 func (l *Logger) Shortout() {
 	l.short = true
+}
+
+func (l *Logger) SetShortout(value bool) {
+	l.short = value
 }
