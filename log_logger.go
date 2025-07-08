@@ -49,7 +49,7 @@ func WithLogFile(logfile string) LoggerOption {
 	return func(l *Logger) {
 		dir := filepath.Dir(logfile)
 		l.SetLogFileDir(dir)
-		l.SetLogFileName(strings.TrimSuffix(logfile, ".log"))
+		l.SetLogFileName(strings.TrimSuffix(filepath.Base(logfile), ".log"))
 		l.openLogfile()
 	}
 }
@@ -58,7 +58,7 @@ func SetLogFile(logfile string) {
 	l := GetLogout()
 	dir := filepath.Dir(logfile)
 	l.SetLogFileDir(dir)
-	l.SetLogFileName(strings.TrimSuffix(logfile, ".log"))
+	l.SetLogFileName(strings.TrimSuffix(filepath.Base(logfile), ".log"))
 	l.openLogfile()
 }
 
