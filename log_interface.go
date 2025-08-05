@@ -30,6 +30,7 @@ type Logger struct {
 	noColor        bool            // 不输出颜色
 	// logFileNoColor bool            // 输出至日志文件的日志没有颜色
 	logoutLock sync.RWMutex // 日志配置锁
+	noReload   bool
 }
 
 // 新建Log

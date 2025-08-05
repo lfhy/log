@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -33,6 +34,10 @@ func (l *Logger) GetLogFileSuffix() string {
 
 // 设置日志文件后缀
 func (l *Logger) SetLogFileSuffix(suffix string) {
+	if strings.HasPrefix(suffix, ".") {
+		l.logfileSuffix = suffix
+		return
+	}
 	l.logfileSuffix = "." + suffix
 }
 
@@ -67,6 +72,10 @@ func (l *Logger) SetLogFileDir(dir string) {
 
 func (l *Logger) setLogFileHandle(file *os.File) {
 	l.logfile = file
+}
+
+func (l *Logger) SetNoReload(noReload bool) {
+	l.noReload = noReload
 }
 
 func (l *Logger) openLogfile() {
@@ -107,6 +116,9 @@ func (l *Logger) openLogfile() {
 func (l *Logger) reloadLogFile() {
 	l.logoutLock.Lock()
 	defer l.logoutLock.Unlock()
+	if l.noReload {
+		return
+	}
 	// 如果是Std的输出则不处理
 	if l.isStdout || l.logfile == nil {
 		return
@@ -130,7 +142,7 @@ func (l *Logger) reloadLogFile() {
 	mtime := fi.ModTime().Format("2006-01-02")
 	// 判断当前时间是否和文件时间一致 不一致则进行移动
 	if mtime != nowDate {
-		oldfile := LogFileDir + LogFileName + "-" + mtime + ".log"
+		oldfile := filepath.Join(LogFileDir, LogFileName+"-"+mtime+l.GetLogFileSuffix())
 		// 如果旧文件存在则进行追加
 		if _, err := os.Stat(oldfile); err == nil {
 			addFile(oldfile, BeforeLogFile, oldfile)

@@ -58,7 +58,10 @@ func SetLogFile(logfile string) {
 	l := GetLogout()
 	dir := filepath.Dir(logfile)
 	l.SetLogFileDir(dir)
-	l.SetLogFileName(strings.TrimSuffix(filepath.Base(logfile), ".log"))
+	filename := filepath.Base(logfile)
+	ext := filepath.Ext(filename)
+	l.SetLogFileName(strings.TrimSuffix(filename, ext))
+	l.SetLogFileSuffix(ext)
 	l.openLogfile()
 }
 
@@ -71,9 +74,21 @@ func WithLogDir(logdir string) LoggerOption {
 	}
 }
 
+func WithSetNoReload(noReload bool) LoggerOption {
+	return func(l *Logger) {
+		// 创建父目录
+		l.SetNoReload(noReload)
+	}
+}
+
 func SetLogDir(logdir string) {
 	l := GetLogout()
 	// 创建父目录
 	l.SetLogFileDir(logdir)
 	l.openLogfile()
+}
+
+func SetNoReload(noReload bool) {
+	l := GetLogout()
+	l.SetNoReload(noReload)
 }
