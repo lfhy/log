@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	log.SetLogLevel(log.DEBUGLevel)
+	log.SetLevel(log.LEVEL_ALL)
 	log.Debug("Debug日志")
 	log.Warn("Warn日志")
 	log.Info("Info日志")
