@@ -1,6 +1,7 @@
 package log
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -89,6 +90,58 @@ func (l *Log) Infof(format string, args ...any) {
 	l.logger.Infof(l.ctx, format, args...)
 }
 
+func (l *Log) Notice(args ...any) {
+	l.logger.Notice(l.ctx, args...)
+}
+
+func (l *Log) Noticeln(args ...any) {
+	l.logger.Notice(l.ctx, args...)
+}
+
+func (l *Log) Noticef(format string, args ...any) {
+	l.logger.Noticef(l.ctx, format, args...)
+}
+
+func (l *Log) Fatal(args ...any) {
+	l.logger.Fatal(l.ctx, args...)
+}
+
+func (l *Log) Fatalln(args ...any) {
+	l.logger.Fatal(l.ctx, args...)
+}
+
+func (l *Log) Fatalf(format string, args ...any) {
+	l.logger.Fatalf(l.ctx, format, args...)
+}
+
+func (l *Log) Panic(args ...any) {
+	l.logger.Panic(l.ctx, args...)
+}
+
+func (l *Log) Panicln(args ...any) {
+	l.logger.Panic(l.ctx, args...)
+}
+
+func (l *Log) Panicf(format string, args ...any) {
+	l.logger.Panicf(l.ctx, format, args...)
+}
+
+func (l *Log) Critical(args ...any) {
+	l.logger.Critical(l.ctx, args...)
+}
+
+func (l *Log) Criticalln(args ...any) {
+	l.logger.Critical(l.ctx, args...)
+}
+
+func (l *Log) Criticalf(format string, args ...any) {
+	l.logger.Criticalf(l.ctx, format, args...)
+}
+
+func (l *Log) Trace(traceID string) {
+	l.ctx = context.WithValue(ctx, CtxMark, traceID)
+}
+
 func (l *Log) Error(args ...any) error {
 	l.logger.Error(l.ctx, args...)
 	return errors.New(fmt.Sprint(args...))
@@ -143,6 +196,11 @@ func (l *Log) SetLevel(level LogLevel) *Log {
 	return l
 }
 
+func (l *Log) Write(p []byte) (n int, err error) {
+	l.logger.Info(l.ctx, string(bytes.TrimRight(p, "\r\n")))
+	return len(p), nil
+}
+
 type LogOption struct {
 	Debug    bool
 	LogDir   string
@@ -195,4 +253,8 @@ func New(mark ...string) *Log {
 	}
 	ctx := context.WithValue(ctx, CtxMark, mark[0])
 	return Ctx(ctx)
+}
+
+func Trace(traceID string) *Log {
+	return New(traceID)
 }

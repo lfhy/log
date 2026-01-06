@@ -1,6 +1,7 @@
 package log
 
 import (
+	"bytes"
 	"context"
 	"time"
 
@@ -84,4 +85,12 @@ func (m *ORMLog) Trace(ctx context.Context, begin time.Time, fc func() (sql stri
 	if err != nil {
 		m.logger.Error(m.Ctx(), "错误:", err)
 	}
+}
+
+func (l *ORMLog) Write(p []byte) (n int, err error) {
+	if l.Level < logger.Info {
+		return len(p), nil
+	}
+	l.logger.Info(l.ctx, string(bytes.TrimRight(p, "\r\n")))
+	return len(p), nil
 }

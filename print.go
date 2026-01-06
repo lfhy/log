@@ -48,6 +48,54 @@ func Infof(format string, args ...any) {
 	glog.Infof(ctx, format, args...)
 }
 
+func Notice(args ...any) {
+	glog.Notice(ctx, args...)
+}
+
+func Noticeln(args ...any) {
+	glog.Notice(ctx, args...)
+}
+
+func Noticef(format string, args ...any) {
+	glog.Noticef(ctx, format, args...)
+}
+
+func Fatal(args ...any) {
+	glog.Fatal(ctx, args...)
+}
+
+func Fatalln(args ...any) {
+	glog.Fatal(ctx, args...)
+}
+
+func Fatalf(format string, args ...any) {
+	glog.Fatalf(ctx, format, args...)
+}
+
+func Panic(args ...any) {
+	glog.Panic(ctx, args...)
+}
+
+func Panicln(args ...any) {
+	glog.Panic(ctx, args...)
+}
+
+func Panicf(format string, args ...any) {
+	glog.Panicf(ctx, format, args...)
+}
+
+func Critical(args ...any) {
+	glog.Critical(ctx, args...)
+}
+
+func Criticalln(args ...any) {
+	glog.Critical(ctx, args...)
+}
+
+func Criticalf(format string, args ...any) {
+	glog.Criticalf(ctx, format, args...)
+}
+
 func Error(args ...any) error {
 	glog.Error(ctx, args...)
 	return errors.New(fmt.Sprint(args...))
